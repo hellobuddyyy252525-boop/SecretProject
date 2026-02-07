@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Week for You ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.8);
+            --accent: #ff85a1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            transition: background 1s ease-in-out;
+            background: #fbc2eb; /* Default color */
+        }
+
+        /* Full Screen Background Image Overlay */
+        #bg-image {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
+            transition: 1s ease-in-out;
+            filter: brightness(0.8) blur(2px);
+        }
+
+        #bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: -1;
+        }
+
+        /* Floating Hearts */
+        .heart {
+            position: fixed;
+            color: #ff4d6d;
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 4s linear forwards;
+            opacity: 0.8;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Content Styles */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: white;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            background: var(--glass);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--accent);
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* Navigation Grid */
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            z-index: 1;
+        }
+
+        @media (max-width: 500px) { .days-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .day-card {
+            background: var(--glass);
+            border: none;
+            padding: 15px 5px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .day-card:hover { transform: scale(1.05); background: white; }
+        .day-card.active { background: var(--accent); color: white; }
+        .day-card span { display: block; font-size: 0.8rem; }
+        .day-card b { font-size: 1rem; }
+
+        /* Main Display Card */
+        #main-display {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 30px;
+            text-align: center;
+            margin: 20px auto;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            z-index: 1;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .display-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .day-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .day-msg { font-size: 1.1rem; line-height: 1.5; color: #555; }
+
+        /* Personal Photo Gallery */
+        .gallery-container {
+            width: 120%;
+            max-width: 900px;
+            margin: 70px auto;
+            z-index: 1;
+        }
+
+        .gallery-title {
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .photo-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 10px 10px 40px 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: rotate(var(--r));
+            transition: 0.3s;
+            width: 200px;
+        }
+
+        .polaroid img { width: 100%; height: 180px; object-fit: cover; }
+        .polaroid:hover { transform: rotate(0deg) scale(1.1); z-index: 5; }
+
+        footer { padding: 40px; color: white; font-weight: 600; text-align: center; z-index: 1; }
+    </style>
+</head>
+<body id="body">
+
+    <div id="bg-image"></div>
+    <div id="bg-overlay"></div>
+
+    <header>
+        <h1>A Little Surpise ✨</h1>
+        <p class="subtitle">Celebrating our first Valentine's Week together</p>
+    </header>
+
+    <div class="days-grid">
+        <button class="day-card" onclick="updatePage('rose')"><span>Feb 7</span><b>Rose Day</b></button>
+        <button class="day-card" onclick="updatePage('propose')"><span>Feb 8</span><b>Propose Day</b></button>
+        <button class="day-card" onclick="updatePage('chocolate')"><span>Feb 9</span><b>Chocolate Day</b></button>
+        <button class="day-card" onclick="updatePage('teddy')"><span>Feb 10</span><b>Teddy Day</b></button>
+        <button class="day-card" onclick="updatePage('promise')"><span>Feb 11</span><b>Promise Day</b></button>
+        <button class="day-card" onclick="updatePage('hug')"><span>Feb 12</span><b>Hug Day</b></button>
+        <button class="day-card" onclick="updatePage('kiss')"><span>Feb 13</span><b>Kiss Day</b></button>
+        <button class="day-card" onclick="updatePage('valentine')"><span>Feb 14</span><b>Valentine's</b></button>
+    </div>
+
+    <main id="main-display">
+        <h2 id="display-title" class="day-title">Pick a Day!</h2>
+        <img id="display-img" class="display-img" src="bunny/1.jpeg" alt="Cute">
+        <p id="display-msg" class="day-msg">I'm so happy we met. Click on the days above to see a little note I wrote for you!</p>
+    </main>
+
+    <section class="gallery-container">
+        <h2 class="gallery-title">Our Best Moments</h2>
+        <div class="photo-row">
+            <!-- GALLERY PHOTOS: Replace these links with your own photos -->
+            <div class="polaroid" style="--r: -3deg;">
+                <img src="bunny/9.jpeg" alt="Us 1">
+            </div>
+            <div class="polaroid" style="--r: 2deg;">
+                <img src="bunny/3.jpeg" alt="Us 2">
+            </div>
+            <div class="polaroid" style="--r: -2deg;">
+                <img src="bunny/12.jpeg" alt="Us 3">
+            </div>
+        </div>
+    </section>
+
+    <footer>Made with ❤️ for you</footer>
+
+    <script>
+        const data = {
+            rose: {
+                title: "Happy Rose Day",
+                msg: "Just a small reminder that you make everything around you a lot more beautiful. I'm really glad you're in my Phool and Fool .... ilu !! ",
+                img: "bunny/4.jpeg",
+                bg: "https://images.unsplash.com/photo-1494515843206-f3117d3f51b7?q=80&w=1200"
+            },
+            propose: {
+                title: "Happy Propose Day",
+                msg: "I’m not going to be super cheesy, but I just want to say: I really like where this is going. Let's keep making memories. thode aur pagalpanti uk ...heheh ",
+                img: "bunny/8.jpeg",
+                bg: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=1200"
+            },
+            chocolate: {
+                title: "Happy Chocolate Day",
+                msg: "TBH u sweeter than any box of chocolates. and u tho know only i love sweets ! (chabuu tuje ..hehe )",
+                img: "bunny/7.jpeg",
+                bg: "https://images.unsplash.com/photo-1548907040-4baa42d100fe?q=80&w=1200"
+            },
+            teddy: {
+                title: "Happy Teddy Day",
+                msg: "If I was there, I'd give you a huge bear hug! Since I'm not, here's a virtual one to keep you smiling. (aur waise bhi woo neechee walle teddy itna kuch khas hai ny uk na ! )",
+                img: "bunny/11.jpeg",
+                bg: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1200"
+            },
+            promise: {
+                title: "Happy Promise Day",
+                msg: "I promise to always be someone you can talk to, laugh with, and rely on. Excited for more dates with you! ...bass thoda kisiko tado math aur bak bak bak karte rahoooooo !",
+                img: "bunny/5.jpeg",
+                bg: "https://images.unsplash.com/photo-1533221223334-93a0339d6796?q=80&w=1200"
+            },
+            hug: {
+                title: "Happy Hug Day",
+                msg: "janab app rahate itna dhur ho ki bass ye virually hi appko hug kar sakta hun !! ",
+                img: "bunny/10.jpeg",
+                bg: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=1200"
+            },
+            kiss: {
+                title: "Happy Kiss Day",
+                msg: "Just thinking about you today and it's making me smile. You're pretty special, you know? (Pagal kar diya hai ... cravinggg for yoyu )",
+                img: "bunny/2.jpeg",
+                bg: "https://images.unsplash.com/photo-1494433215233-14639912534e?q=80&w=1200"
+            },
+            valentine: {
+                title: "Happy Valentine's Day",
+                msg: "Happy first Valentine's together! I'm so glad we're doing this. You're wonderful.( Oy dushman , pyshcoo aurr thoda dushmani nibhayegi !!?)",
+                img: "bunny/6.jpeg",
+                bg: "https://images.unsplash.com/photo-1511216335778-7cb8f49fa7a3?q=80&w=1200"
+            }
+        };
+
+        function updatePage(day) {
+            const item = data[day];
+            const display = document.getElementById('main-display');
+            
+            // Fade effect
+            display.style.opacity = 0;
+            
+            setTimeout(() => {
+                document.getElementById('display-title').innerText = item.title;
+                document.getElementById('display-msg').innerText = item.msg;
+                document.getElementById('display-img').src = item.img;
+                document.getElementById('bg-image').style.backgroundImage = `url('${item.bg}')`;
+                display.style.opacity = 1;
+            }, 300);
+
+            // Create a burst of hearts
+            for(let i=0; i<10; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = ['❤️','💖','✨','🌸'][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+
+        // Constant floating hearts
+        setInterval(createHeart, 500);
+    </script>
+</body>
+</html>
